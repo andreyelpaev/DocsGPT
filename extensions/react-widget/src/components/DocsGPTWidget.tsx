@@ -7,6 +7,9 @@ import { fetchAnswerStreaming } from '../requests/streamingApi';
 import styled, { keyframes, createGlobalStyle } from 'styled-components';
 import snarkdown from '@bpmn-io/snarkdown';
 import { sanitize } from 'dompurify';
+
+import {MathJax} from 'better-react-mathjax'
+
 const GlobalStyles = createGlobalStyle`
 .response pre {
     padding: 8px;
@@ -49,9 +52,9 @@ const StyledContainer = styled.div`
     position: relative;
     bottom: 0;
     left: 0;
-    width: 352px;
-    height: 407px;
-    max-height: 407px;
+    width: 412px;
+    height: 90vh;
+    max-height: 90vh;
     border-radius: 0.75rem;
     background-color: #222327;
     font-family: sans-serif;
@@ -130,7 +133,7 @@ const Description = styled.p`
     margin-top: 0;
 `;
 const Conversation = styled.div`
-    height: 16rem;
+    height: 80%;
     padding-inline: 0.5rem;
     border-radius: 0.375rem;
     text-align: left;
@@ -412,7 +415,7 @@ export const DocsGPTWidget = ({
                           type='ANSWER'
                           ref={(index === queries.length - 1) ? endMessageRef : null}
                         >
-                          <div className="response" dangerouslySetInnerHTML={{ __html: sanitize(snarkdown(query.response)) }} />
+                          <MathJax><div className="response" dangerouslySetInnerHTML={{ __html: query.response.includes('$') ? sanitize(query.response) : sanitize(snarkdown(query.response)) }} /></MathJax>
                         </Message>
                       </MessageBubble>
                         : <div>
@@ -446,7 +449,7 @@ export const DocsGPTWidget = ({
             onSubmit={handleSubmit}>
             <StyledInput
               value={prompt} onChange={(event) => setPrompt(event.target.value)}
-              type='text' placeholder="What do you want to do?" />
+              type='text' placeholder="Задай вопрос постараюсь оветить" />
             <StyledButton
               disabled={prompt.length == 0 || status !== 'idle'}>
               <PaperPlaneIcon width={15} height={15} color='white' />
