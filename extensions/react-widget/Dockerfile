@@ -2,7 +2,7 @@ FROM node:lts as frontend-packages
 WORKDIR /code
 COPY package.json /code/
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 FROM node:lts as frontend-build
 
