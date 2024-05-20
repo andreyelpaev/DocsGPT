@@ -75,6 +75,7 @@ export function fetchAnswerStreaming({
               const messageEvent = new MessageEvent('message', {
                 data: line,
               });
+
   
               onEvent(messageEvent); // handle each message
             }

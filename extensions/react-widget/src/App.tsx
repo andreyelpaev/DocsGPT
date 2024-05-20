@@ -1,11 +1,12 @@
 import React from "react"
 import {DocsGPTWidget} from "./components/DocsGPTWidget"
-import {MathJaxContext} from 'better-react-mathjax'
+import "highlight.js/styles/github-dark.min.css";
+import 'katex/dist/katex.min.css'
 
 const App = () => {
   return (
     <div>
-      <MathJaxContext>
+
       <DocsGPTWidget         
         apiHost="https://gptcloud.arc53.com"
         selectDocs="local/opz/"
@@ -15,7 +16,6 @@ const App = () => {
         description="Андрей"
         heroTitle="Добро пожаловать в Rockstim!"
         heroDescription="Задайте мне вопрос я постараюсь ответить."/>
-        </MathJaxContext>
     </div>
   )
 }

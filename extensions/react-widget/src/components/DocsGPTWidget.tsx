@@ -5,13 +5,12 @@ import { MESSAGE_TYPE, Query, Status } from '../types/index';
 import MessageIcon from 'url:../assets/message.svg'
 import { fetchAnswerStreaming } from '../requests/streamingApi';
 import styled, { keyframes, createGlobalStyle } from 'styled-components';
-import snarkdown from '@bpmn-io/snarkdown';
-import { sanitize } from 'dompurify';
-
-import {MathJax} from 'better-react-mathjax'
-
+import {useMarkdownProcessor} from './useMarkdownProcessor'
 const GlobalStyles = createGlobalStyle`
-.response pre {
+p {
+  padding: 0;
+}
+pre {
     padding: 8px;
     width: 90%;
     font-size: 12px;
@@ -19,16 +18,16 @@ const GlobalStyles = createGlobalStyle`
     overflow-x: auto;
     background-color: #1B1C1F;
 }
-.response h1{
+h1{
   font-size: 20px;
 }
-.response h2{
+h2{
   font-size: 18px;
 }
-.response h3{
+h3{
   font-size: 16px;
 }
-.response code:not(pre code){
+code:not(pre code){
   border-radius: 6px;
   padding: 1px 3px 1px 3px;
   font-size: 12px;
@@ -159,7 +158,7 @@ const Message = styled.p<{ type: MESSAGE_TYPE }>`
     margin: 4px;
     display: block;
     line-height: 1.5;
-    padding: 0.75rem;
+    padding: ${props => props.type === 'ANSWER' ? ' 0 0.75rem' : '0.75rem'};
     border-radius: 0.375rem;
 `;
 const ErrorAlert = styled.div`
@@ -186,6 +185,7 @@ const dotBounce = keyframes`
 
 const DotAnimation = styled.div`
   display: inline-block;
+  padding-top: 0.5rem;
   animation: ${dotBounce} 1s infinite ease-in-out;
 `;
 // delay classes as styled components
@@ -284,6 +284,12 @@ const Hero = ({ title, description }: { title: string, description: string }) =>
     </>
   );
 };
+
+
+const MessageProcessor = (props: {message: Query}) => {
+  return useMarkdownProcessor(props?.message.response);
+}
+
 export const DocsGPTWidget = ({
   apiHost = 'https://gptcloud.arc53.com',
   selectDocs = 'default',
@@ -373,6 +379,8 @@ export const DocsGPTWidget = ({
   const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
     event.currentTarget.src = "https://d3dg1063dc54p9.cloudfront.net/cute-docsgpt.png";
   };
+
+
   return (
     <>
       <WidgetContainer>
@@ -415,7 +423,7 @@ export const DocsGPTWidget = ({
                           type='ANSWER'
                           ref={(index === queries.length - 1) ? endMessageRef : null}
                         >
-                          <MathJax><div className="response" dangerouslySetInnerHTML={{ __html: (query.response.includes("$") || query.response.includes("lambda") || query.response.includes("frac")) ? sanitize(query.response) : sanitize(snarkdown(query.response)) }} /></MathJax>
+                          <MessageProcessor message={query} />
                         </Message>
                       </MessageBubble>
                         : <div>
