@@ -4,9 +4,6 @@
   "private": false,
   "description": "DocsGPT 🦖 is an innovative open-source tool designed to simplify the retrieval of information from project documentation using advanced GPT models 🤖.",
   "source": "./src/index.html",
-  "main": "dist/main.js",
-  "module": "dist/module.js",
-  "types": "dist/types.d.ts",
   "files": [    
     "dist",
     "package.json"
@@ -18,12 +15,11 @@
     "styled-components": "^5"
   },
   "scripts": {
-    "build": "parcel build src/index.ts",
+    "build": "parcel build src/index.html",
     "dev": "parcel src/index.html -p 3000",
     "test": "jest",
     "lint": "eslint",
-    "check": "tsc --noEmit",
-    "ci": "yarn build && yarn test && yarn lint && yarn check"
+    "check": "tsc --noEmit"
   },
   "dependencies": {
     "@babel/plugin-transform-flow-strip-types": "^7.23.3",
