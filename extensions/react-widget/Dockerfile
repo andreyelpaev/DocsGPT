@@ -18,4 +18,6 @@ COPY --from=frontend-build /code/nginx.conf /etc/nginx/nginx.conf
 
 WORKDIR /usr/share/nginx/html
 COPY --from=frontend-build /code/dist/ .
+COPY ./src/index.html ./index.html
+
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
