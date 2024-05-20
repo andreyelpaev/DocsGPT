@@ -2,7 +2,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { PaperPlaneIcon, RocketIcon, ExclamationTriangleIcon, Cross2Icon } from '@radix-ui/react-icons';
 import { MESSAGE_TYPE, Query, Status } from '../types/index';
-import MessageIcon from '../assets/message.svg'
+import MessageIcon from 'url:../assets/message.svg'
 import { fetchAnswerStreaming } from '../requests/streamingApi';
 import styled, { keyframes, createGlobalStyle } from 'styled-components';
 import snarkdown from '@bpmn-io/snarkdown';
@@ -52,7 +52,7 @@ const StyledContainer = styled.div`
     position: relative;
     bottom: 0;
     left: 0;
-    width: 412px;
+    width: 410px;
     height: 90vh;
     max-height: 90vh;
     border-radius: 0.75rem;
@@ -299,7 +299,7 @@ export const DocsGPTWidget = ({
   const [status, setStatus] = useState<Status>('idle');
   const [queries, setQueries] = useState<Query[]>([])
   const [conversationId, setConversationId] = useState<string | null>(null)
-  const [open, setOpen] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(true)
   const [eventInterrupt, setEventInterrupt] = useState<boolean>(false); //click or scroll by user while autoScrolling
   const endMessageRef = useRef<HTMLDivElement | null>(null);
   const handleUserInterrupt = () => {
@@ -415,7 +415,7 @@ export const DocsGPTWidget = ({
                           type='ANSWER'
                           ref={(index === queries.length - 1) ? endMessageRef : null}
                         >
-                          <MathJax><div className="response" dangerouslySetInnerHTML={{ __html: query.response.includes('$') ? sanitize(query.response) : sanitize(snarkdown(query.response)) }} /></MathJax>
+                          <MathJax><div className="response" dangerouslySetInnerHTML={{ __html: (query.response.includes("$") || query.response.includes("lambda") || query.response.includes("frac")) ? sanitize(query.response) : sanitize(snarkdown(query.response)) }} /></MathJax>
                         </Message>
                       </MessageBubble>
                         : <div>
@@ -425,8 +425,8 @@ export const DocsGPTWidget = ({
                                 <ExclamationTriangleIcon style={{ marginTop: '4px' }} width={22} height={22} color='#b91c1c' />
                               </IconWrapper>
                               <div>
-                                <h5 style={{ margin: 2 }}>Network Error</h5>
-                                <span style={{ margin: 2, fontSize: '13px' }}>Something went wrong !</span>
+                                <h5 style={{ margin: 2 }}>Ой ошибка!</h5>
+                                <span style={{ margin: 2, fontSize: '13px' }}>Программисты уже работают над ошибкой!</span>
                               </div>
                             </ErrorAlert>
                               : <MessageBubble type='ANSWER'>
@@ -449,7 +449,7 @@ export const DocsGPTWidget = ({
             onSubmit={handleSubmit}>
             <StyledInput
               value={prompt} onChange={(event) => setPrompt(event.target.value)}
-              type='text' placeholder="Задай вопрос постараюсь оветить" />
+              type='text' placeholder="Задай вопрос постараюсь ответить" />
             <StyledButton
               disabled={prompt.length == 0 || status !== 'idle'}>
               <PaperPlaneIcon width={15} height={15} color='white' />
